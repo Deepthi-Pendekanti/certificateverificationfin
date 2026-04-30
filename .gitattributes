@@ -1,0 +1,28 @@
+# Auto detect text files and normalize line endings to LF
+* text=auto
+
+# Solidity files
+*.sol text eol=lf
+
+# JavaScript files
+*.js text eol=lf
+*.json text eol=lf
+
+# Shell scripts
+*.sh text eol=lf
+
+# Markdown files
+*.md text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.mov binary
+*.mp4 binary
+*.mp3 binary
+*.gz binary
+*.zip binary
+*.7z binary
