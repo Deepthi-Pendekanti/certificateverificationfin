@@ -28,19 +28,23 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // -----------------------------------------------------------
-// BLOCKCHAIN AND WEB3 SETUP
+// BLOCKCHAIN AND WEB3 SETUP (use environment variables for secrets)
 // -----------------------------------------------------------
-const GANACHE_URL = 'http://127.0.0.1:7545';
+const GANACHE_URL = process.env.GANACHE_URL || 'http://127.0.0.1:7545';
 // Initialize Web3 instance
 const web3 = new Web3(GANACHE_URL);
 
-// !!! DEPLOYMENT DETAILS - IMPORTANT: Update these based on your deployed contract !!!
-// IMPORTANT: These must match the address of your deployed CertificateRegistry contract
-const CONTRACT_ADDRESS = '0x9Bd97DEe81025015BC86cDC62f089cd59c3Ce65E';
-const ADMIN_WALLET = '0x17Cf0BE8339d16E2ff2C8b94E39Ff048D44aE898'; // Admin's public key (must match contract owner)
-const ADMIN_PRIVATE_KEY = '0xf1dde1d89abb6814ce2f4e0a07c88ae9fa9dcb840dad8045b9a90399fb8d00ae'; // Admin's private key for signing transactions
+// Deployment details should come from environment variables.
+// For local development, create a `.env` file and do NOT commit it.
+const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS || '';
+const ADMIN_WALLET = process.env.ADMIN_WALLET || '';
+const ADMIN_PRIVATE_KEY = process.env.ADMIN_PRIVATE_KEY || '';
 
 let registryContract;
+
+if (!CONTRACT_ADDRESS) console.warn('[WARN] CONTRACT_ADDRESS not set (process.env.CONTRACT_ADDRESS)');
+if (!ADMIN_WALLET) console.warn('[WARN] ADMIN_WALLET not set (process.env.ADMIN_WALLET)');
+if (!ADMIN_PRIVATE_KEY) console.warn('[WARN] ADMIN_PRIVATE_KEY not set (process.env.ADMIN_PRIVATE_KEY)');
 
 // Load Contract ABI (Assuming the build/contracts directory structure)
 try {

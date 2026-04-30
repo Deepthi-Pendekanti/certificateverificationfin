@@ -28,21 +28,23 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // -----------------------------------------------------------
-// BLOCKCHAIN AND WEB3 SETUP
+// BLOCKCHAIN AND WEB3 SETUP (use environment variables for secrets)
 // -----------------------------------------------------------
-const GANACHE_URL = 'http://127.0.0.1:7545';
-const web3 = new Web3(GANACHE_URL); 
+const GANACHE_URL = process.env.GANACHE_URL || 'http://127.0.0.1:7545';
+const web3 = new Web3(GANACHE_URL);
 
-// !!! DEPLOYMENT DETAILS - FILLED IN BASED ON YOUR PREVIOUS SUCCESSFUL MIGRATION !!!
-// Contract Address: 0x0c90B1bEEFf8E29364e4300958d80fe0add5Cf78
-const CONTRACT_ADDRESS = '0x0c90B1bEEFf8E29364e4300958d80fe0add5Cf78'; 
-// Admin Wallet: 0x3D528a8c8c2AC5627F85F857f00222f6d0f66675
-const ADMIN_WALLET = '0x3D528a8C8c2AC5687De4BE92BBaeD087C0c95472'; // Admin's public key
-const ADMIN_PRIVATE_KEY = '0x85791710d1e380127defe89cdb9e218c93a220ebc577264f36b6343d26a9ba19'; // Admin's private key for signing transactions
+// Deployment details should come from environment variables.
+const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS || '';
+const ADMIN_WALLET = process.env.ADMIN_WALLET || '';
+const ADMIN_PRIVATE_KEY = process.env.ADMIN_PRIVATE_KEY || '';
 
 // Load Contract ABI (Assuming the build/contracts directory structure)
 const CertificateRegistryABI = require('./build/contracts/CertificateRegistry.json').abi;
 const registryContract = new web3.eth.Contract(CertificateRegistryABI, CONTRACT_ADDRESS);
+
+if (!CONTRACT_ADDRESS) console.warn('[WARN] CONTRACT_ADDRESS not set (process.env.CONTRACT_ADDRESS)');
+if (!ADMIN_WALLET) console.warn('[WARN] ADMIN_WALLET not set (process.env.ADMIN_WALLET)');
+if (!ADMIN_PRIVATE_KEY) console.warn('[WARN] ADMIN_PRIVATE_KEY not set (process.env.ADMIN_PRIVATE_KEY)');
 
 // -----------------------------------------------------------
 // SIMULATED DATABASE SETUP (for Student Accounts and Certificate Metadata)
